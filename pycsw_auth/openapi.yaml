@@ -1,0 +1,241 @@
+openapi: 3.0.2
+
+info:
+    title: pycsw-auth
+    version: 0.0.1
+
+servers:
+    - url: http://localhost:5000
+
+components:
+    responses:
+        Records:
+            description: Records
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/records'
+        Record:
+            description: Record
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/record'
+        Scopes:
+            description: Scopes
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/scopes'
+        Scope:
+            description: Scope
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/scope'
+    schemas:
+        records:
+            type: object
+            properties:
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/record'
+            required:
+                - records
+        record:
+            type: object
+            properties:
+                identifier:
+                    type: string
+                    description: record identifier
+                scopes:
+                    type: array
+                    description: valid scopes
+                    items:
+                        type: string
+            required:
+                - identifier
+                - scopes
+        scopes:
+            type: object
+            properties:
+                scopes:
+                    type: array
+                    minItems: 1
+                    items:
+                        $ref: '#/components/schemas/scope'
+            required:
+                - scopes
+        scope:
+            type: object
+            properties:
+                identifier:
+                    type: string
+                    description: scope identifier
+                record_identifier:
+                    type: string
+                    description: record identifier
+                can_read:
+                    type: boolean
+                    description: whether scope can read record
+                can_create:
+                    type: boolean
+                    description: whether scope can create record
+                can_replace:
+                    type: boolean
+                    description: whether scope can replace record
+                can_update:
+                    type: boolean
+                    description: whether scope can update record
+                can_delete:
+                    type: boolean
+                    description: whether scope can delete record
+            required:
+                - identifier
+                - record_identifier
+                - can_read
+                - can_create
+                - can_replace
+                - can_update
+                - can_delete
+
+paths:
+    '/auth/records':
+        get:
+            operationId: authGetRecords
+            responses:
+                '200':
+                    $ref: '#/components/responses/Records'
+            tags:
+                - Records
+        post:
+            operationId: authPostRecord
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/record'
+            responses:
+                '201':
+                    description: successful creation
+            tags:
+                - Records
+
+    '/auth/records/{recordId}':
+        get:
+            operationId: authGetRecord
+            parameters:
+                - name: recordId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    $ref: '#/components/responses/Record'
+            tags:
+                - Records
+        put:
+            operationId: authPutRecord
+            parameters:
+                - name: recordId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/record'
+            responses:
+                '204':
+                    description: successful update
+            tags:
+                - Records
+        delete:
+            operationId: authDeleteRecord
+            parameters:
+                - name: recordId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '204':
+                    description: successful deletion
+            tags:
+                - Records
+    '/auth/scopes':
+        get:
+            operationId: authGetScopes
+            responses:
+                '200':
+                    $ref: '#/components/responses/Scopes'
+            tags:
+                - Scopes
+        post:
+            operationId: authPostScope
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/scope'
+            responses:
+                '201':
+                    description: successful creation
+            tags:
+                - Scopes
+    '/auth/scopes/{scopeId}':
+        get:
+            operationId: authGetScope
+            parameters:
+                - name: scopeId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    $ref: '#/components/responses/Scope'
+            tags:
+                - Scopes
+        put:
+            operationId: authPutScope
+            parameters:
+                - name: scopeId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/scope'
+            responses:
+                '204':
+                    description: successful update
+            tags:
+                - Scopes
+        delete:
+            operationId: authDeleteScope
+            parameters:
+                - name: scopeId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '204':
+                    description: successful deletion
+            tags:
+                - Scopes
+tags:
+    - name: Records
+    - name: Scopes
