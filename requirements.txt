@@ -1,4 +1,8 @@
 Flask<2.3
 Flask-SQLAlchemy<3
-pycsw
+Jinja2
+https://github.com/geopython/pycsw/archive/master.zip
 SQLAlchemy<2
+pygeofilter
+PyYAML
+pygeoif
